@@ -8,5 +8,6 @@ export const sites = [
   ['scorecard', 'Strata Capacity Test', 'https://stratastaffglobal.com/scorecard/'],
   ['icp-access', 'ICP Access', 'https://stratastaffglobal.com/icp/icp-login.php'],
   ['srf-login', 'Staff Login (SRF)', 'https://stratastaff.com/srf/admin/login.php'],
-  ['signatures', 'Email Signature Generator', 'https://onboarding.stratastaffglobal.com/banner/stratastaff/']
+  ['signatures', 'Email Signature Generator', 'https://onboarding.stratastaffglobal.com/banner/stratastaff/'],
+  ['strata-systems', 'Strata Systems Dashboard', 'https://strata-staff-systems.vercel.app/']
 ].map(([id, name, url]) => ({ id, name, url }));

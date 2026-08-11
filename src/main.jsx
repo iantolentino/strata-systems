@@ -14,7 +14,7 @@ const directFavicon = url => `${new URL(url).origin}/favicon.ico`;
 function App() {
   const [data, setData] = useState({ results: fallback, checkedAt: 0, maintenance: {} });
   const [query, setQuery] = useState('');
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [newSite, setNewSite] = useState({ name: '', url: '' });

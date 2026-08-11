@@ -26,7 +26,7 @@ The service-role key is server-only and must not be exposed to browser code. Wit
 
 ## Deploy
 
-Import the repository into Vercel. The default Vite build settings work automatically: `npm run build`, output directory `dist`.
+See the full [Vercel deployment guide](VERCEL_DEPLOYMENT.md). The default Vite build settings work automatically: `npm run build`, output directory `dist`.
 
 ## Add or remove a site
 

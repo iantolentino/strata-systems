@@ -25,5 +25,6 @@ insert into sites (id, name, url, "group") values
   ('scorecard', 'Strata Capacity Test', 'https://stratastaffglobal.com/scorecard/', 'internal'),
   ('icp-access', 'ICP Access', 'https://stratastaffglobal.com/icp/icp-login.php', 'internal'),
   ('srf-login', 'Staff Login (SRF)', 'https://stratastaff.com/srf/admin/login.php', 'internal'),
-  ('signatures', 'Email Signature Generator', 'https://onboarding.stratastaffglobal.com/banner/stratastaff/', 'internal')
+  ('signatures', 'Email Signature Generator', 'https://onboarding.stratastaffglobal.com/banner/stratastaff/', 'internal'),
+  ('strata-systems', 'Strata Systems Dashboard', 'https://strata-staff-systems.vercel.app/', 'internal')
 on conflict (id) do nothing;

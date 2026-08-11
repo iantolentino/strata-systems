@@ -27,9 +27,13 @@ Before deploying, add these variables under **Settings → Environment Variables
 ```text
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+RESEND_API_KEY=re_your-api-key
+RESEND_FROM=Strata Systems <reports@your-verified-domain.com>
 ```
 
 Redeploy after adding or changing environment variables.
+
+`RESEND_API_KEY` and `RESEND_FROM` are optional. When configured, the daily 09:00 UTC cron sends the monthly report on the last day of each month to `ian@stratastaff.com`.
 
 ## 4. Deploy
 

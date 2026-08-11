@@ -1,0 +1,8 @@
+import { getChecks, getSites } from './storage.js';
+
+const esc = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }[char]));
+export default async function handler(request, response) {
+  try {
+    const sites = await getSites(); const requested = request.query?.site || 'overall'; const site = sites.find(item => item.id === requested); const now = new Date(); const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString(); const checks = await getChecks(from, now.toISOString()); const rows = site ? checks.filter(check => check.site_id === site.id) : checks; const uptime = rows.length ? Math.round(rows.filter(check => check.status === 'online').length / rows.length * 10000) / 100 : 100; const color = uptime >= 99 ? '#15803d' : uptime >= 95 ? '#b45309' : '#b91c1c'; const label = site ? `${site.name} uptime` : 'Strata Systems uptime'; const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="28" role="img" aria-label="${esc(label)}: ${uptime}%"><rect width="220" height="28" rx="3" fill="#f8fafc" stroke="#cbd5e1"/><rect x="1" y="1" width="132" height="26" rx="2" fill="#e2e8f0"/><text x="10" y="18" font-family="Arial,sans-serif" font-size="11" fill="#334155">${esc(label)}</text><text x="143" y="18" font-family="monospace" font-size="12" font-weight="700" fill="${color}">${uptime}%</text></svg>`; response.setHeader('Content-Type', 'image/svg+xml; charset=utf-8'); response.setHeader('Cache-Control', 'public, max-age=300'); return response.status(200).send(svg);
+  } catch (error) { return response.status(500).json({ error: error.message }); }
+}

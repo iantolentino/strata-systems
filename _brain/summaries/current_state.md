@@ -16,7 +16,7 @@ FIX-004 — Add local Vite API bridge for password actions
 Completed: 2026-08-11
 
 ## Next Task
-PUBLISH-005 — Commit and push the completed MVP to GitHub
+None — select from backlog
 Depends on: none
 
 ## Active Blockers

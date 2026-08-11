@@ -6,7 +6,7 @@
 ---
 
 ## Active Task
-> Publish completed Strata Systems dashboard to GitHub
+> None — select from backlog
 
 ---
 
@@ -24,6 +24,7 @@
 | UI-002 | Redesign dashboard as dark control-room interface | 2026-08-11 |
 | FEAT-003 | Add protected site management and Supabase/PDF reporting | 2026-08-11 |
 | FIX-004 | Add local Vite API bridge for password actions | 2026-08-11 |
+| PUBLISH-005 | Commit and push completed MVP to GitHub | 2026-08-11 |
 
 ---
 

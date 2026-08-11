@@ -26,5 +26,6 @@ insert into sites (id, name, url, "group") values
   ('icp-access', 'ICP Access', 'https://stratastaffglobal.com/icp/icp-login.php', 'internal'),
   ('srf-login', 'Staff Login (SRF)', 'https://stratastaff.com/srf/admin/login.php', 'internal'),
   ('signatures', 'Email Signature Generator', 'https://onboarding.stratastaffglobal.com/banner/stratastaff/', 'internal'),
-  ('strata-systems', 'Strata Systems Dashboard', 'https://strata-staff-systems.vercel.app/', 'internal')
+  ('strata-systems', 'Strata Systems Dashboard', 'https://strata-staff-systems.vercel.app/', 'internal'),
+  ('grafana-private', 'GRAFANA Monitoring Servers', 'http://172.16.1.243:3000/', 'private')
 on conflict (id) do nothing;

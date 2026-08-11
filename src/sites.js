@@ -9,5 +9,6 @@ export const sites = [
   ['icp-access', 'ICP Access', 'https://stratastaffglobal.com/icp/icp-login.php'],
   ['srf-login', 'Staff Login (SRF)', 'https://stratastaff.com/srf/admin/login.php'],
   ['signatures', 'Email Signature Generator', 'https://onboarding.stratastaffglobal.com/banner/stratastaff/'],
-  ['strata-systems', 'Strata Systems Dashboard', 'https://strata-staff-systems.vercel.app/']
-].map(([id, name, url]) => ({ id, name, url }));
+  ['strata-systems', 'Strata Systems Dashboard', 'https://strata-staff-systems.vercel.app/'],
+  ['grafana-private', 'GRAFANA Monitoring Servers', 'http://172.16.1.243:3000/', 'private']
+].map(([id, name, url, group = 'internal']) => ({ id, name, url, group }));

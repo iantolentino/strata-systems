@@ -6,6 +6,7 @@ export const dbEnabled = Boolean(supabaseUrl && serviceKey);
 let customSites = [];
 let memoryChecks = [];
 let memoryMaintenance = {};
+let memoryReport = null;
 
 const headers = { apikey: serviceKey || '', Authorization: `Bearer ${serviceKey || ''}`, 'Content-Type': 'application/json' };
 async function db(path, options = {}) {
@@ -22,6 +23,14 @@ export async function addSite(site) {
   if (!dbEnabled) { customSites = [...customSites, site]; return site; }
   return (await db('sites', { method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify({ ...site, sla_target: site.slaTarget ?? 99, maintenance: false }) }))[0];
 }
+export async function updateSite(id, site) {
+  if (!dbEnabled) { customSites = customSites.map(item => item.id === id ? { ...item, ...site } : item); return site; }
+  return (await db(`sites?id=eq.${encodeURIComponent(id)}`, { method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify({ name: site.name, url: site.url, group: site.group, sla_target: site.slaTarget ?? 99 }) }))[0];
+}
+export async function deleteSite(id) {
+  if (!dbEnabled) { customSites = customSites.filter(item => item.id !== id); delete memoryMaintenance[id]; return; }
+  await db(`sites?id=eq.${encodeURIComponent(id)}`, { method: 'DELETE', headers: { Prefer: 'return=minimal' } });
+}
 export async function setMaintenance(id, maintenance) {
   if (!dbEnabled) { memoryMaintenance[id] = maintenance; return; }
   await db(`sites?id=eq.${encodeURIComponent(id)}`, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ maintenance }) });
@@ -33,6 +42,14 @@ export async function saveChecks(checks) {
 export async function getChecks(from, to) {
   if (!dbEnabled) return memoryChecks.filter(check => check.checkedAt >= from && check.checkedAt <= to);
   return db(`checks?select=site_id,checked_at,status,response_time_ms&checked_at=gte.${encodeURIComponent(from)}&checked_at=lte.${encodeURIComponent(to)}&order=checked_at.asc`);
+}
+export async function getLastReport() {
+  if (!dbEnabled) return memoryReport;
+  const rows = await db('report_status?select=status,sent_at,reason&order=sent_at.desc&limit=1'); return rows[0] || null;
+}
+export async function saveReportStatus(status, sentAt, reason = null) {
+  memoryReport = { status, sent_at: sentAt, reason };
+  if (dbEnabled) await db('report_status', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: JSON.stringify({ status, sent_at: sentAt, reason }) });
 }
 
 export async function pruneMonth(from, to, month) {

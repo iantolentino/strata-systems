@@ -6,6 +6,7 @@ import { sites } from './sites';
 import './styles.css';
 import './modal.css';
 import './dashboard.css';
+import './frontend-features.js';
 
 const fallback = sites.map(site => ({ ...site, status: site.group === 'Private On-Premise' ? 'online' : 'online', responseTime: null, httpStatus: null }));
 const displayUrl = url => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
@@ -14,7 +15,7 @@ const directFavicon = url => `${new URL(url).origin}/favicon.ico`;
 const monthBounds = month => { const [year, value] = month.split('-').map(Number); return { from: new Date(Date.UTC(year, value - 1, 1)).toISOString(), to: new Date(Date.UTC(year, value, 0, 23, 59, 59, 999)).toISOString() }; };
 const previousMonth = month => { const [year, value] = month.split('-').map(Number); const date = new Date(Date.UTC(year, value - 2, 1)); return date.toISOString().slice(0, 7); };
 const eventCount = checks => checks.filter((check, index) => check.status === 'offline' && (index === 0 || checks[index - 1].status !== 'offline')).length;
-const metrics = (checks, site) => { const total = checks.length; const online = checks.filter(check => check.status === 'online').length; const times = checks.map(check => check.response_time_ms ?? check.responseTime).filter(Number.isFinite); return { uptime: total ? (online / total) * 100 : 100, incidents: eventCount(checks), average: times.length ? times.reduce((sum, time) => sum + time, 0) / times.length : null, slow: times.length ? times.reduce((sum, time) => sum + time, 0) / times.length > 1000 : false, belowSla: site.group !== 'Private On-Premise' && total > 0 && (online / total) * 100 < (site.slaTarget ?? site.sla_target ?? 99) }; };
+const metrics = (checks, site) => { const total = checks.length; const online = checks.filter(check => check.status === 'online').length; const times = checks.map(check => check.response_time_ms ?? check.responseTime).filter(Number.isFinite); return { uptime: total ? (online / total) * 100 : 100, incidents: eventCount(checks), average: times.length ? times.reduce((sum, time) => sum + time, 0) / times.length : null, slow: times.length ? times.reduce((sum, time) => sum + time, 0) / times.length > 2000 : false, belowSla: site.group !== 'Private On-Premise' && total > 0 && (online / total) * 100 < (site.slaTarget ?? site.sla_target ?? 99) }; };
 
 function Sparkline({ checks }) { const points = checks.slice(-40).map((check, index, values) => { const time = check.response_time_ms ?? check.responseTime ?? 0; const max = Math.max(...values.map(item => item.response_time_ms ?? item.responseTime ?? 0), 1); return `${(index / Math.max(values.length - 1, 1)) * 220},${42 - (time / max) * 34}`; }).join(' '); return <svg className="sparkline" viewBox="0 0 220 44" role="img" aria-label="Response time history"><polyline points={points} fill="none" stroke="currentColor" strokeWidth="2"/></svg>; }
 

@@ -5,7 +5,7 @@ let latestCache = null;
 let lastReport = null;
 
 async function check(site) {
-  if (site.group === 'Private On-Premise') return { ...site, status: 'online', responseTime: null, httpStatus: null };
+  if (site.group === 'Private On-Premise') return { ...site, status: 'unmonitored', responseTime: null, httpStatus: null };
   const started = Date.now();
   for (let attempt = 0; attempt < 2; attempt += 1) {
     try {
@@ -46,7 +46,7 @@ export default async function handler(request, response) {
     const currentSites = await getSites();
     const checkedAt = new Date().toISOString();
     const results = await Promise.all(currentSites.map(check));
-    await saveChecks(results.map(site => ({ id: site.id, checkedAt, status: site.status, responseTime: site.responseTime })));
+    await saveChecks(results.filter(site => site.status !== 'unmonitored').map(site => ({ id: site.id, checkedAt, status: site.status, responseTime: site.responseTime })));
     const historyFrom = new Date(Date.now() - 32 * 86400000).toISOString(); const history = await getChecks(historyFrom, checkedAt); const payload = { checkedAt: Date.parse(checkedAt), maintenance: Object.fromEntries(results.map(site => [site.id, Boolean(site.maintenance)])), results: results.map(site => { const rows = history.filter(check => check.site_id === site.id); let downSince = null; for (let index = rows.length - 1; index >= 0 && rows[index].status === 'offline'; index -= 1) downSince = rows[index].checked_at || rows[index].checkedAt; return { ...site, downSince }; }) };
     if (request.headers['x-vercel-cron']) {
       const tomorrow = new Date(Date.now() + 86400000);

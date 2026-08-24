@@ -25,6 +25,8 @@
 | FEAT-003 | Add protected site management and Supabase/PDF reporting | 2026-08-11 |
 | FIX-004 | Add local Vite API bridge for password actions | 2026-08-11 |
 | PUBLISH-005 | Commit and push completed MVP to GitHub | 2026-08-11 |
+| REFACTOR-006 | Consolidate frontend-features.js into React components, fix XSS/dark-mode/dup-fetch, unmonitored private status, pin deps, lazy-load jspdf | 2026-08-22 |
+| TEST-007 | Add Vitest unit tests (11 passing), ESLint flat config, GitHub Actions CI (lint+test+build) | 2026-08-22 |
 
 ---
 

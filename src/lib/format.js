@@ -1,0 +1,9 @@
+const safeUrl = url => { try { return new URL(url); } catch { return null; } };
+export const displayUrl = url => url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+export const favicon = url => { const parsed = safeUrl(url); return parsed ? `https://www.google.com/s2/favicons?domain=${parsed.hostname}&sz=64` : ''; };
+export const directFavicon = url => { const parsed = safeUrl(url); return parsed ? `${parsed.origin}/favicon.ico` : ''; };
+export const monthBounds = month => { const [year, value] = month.split('-').map(Number); return { from: new Date(Date.UTC(year, value - 1, 1)).toISOString(), to: new Date(Date.UTC(year, value, 0, 23, 59, 59, 999)).toISOString() }; };
+export const previousMonth = month => { const [year, value] = month.split('-').map(Number); const date = new Date(Date.UTC(year, value - 2, 1)); return date.toISOString().slice(0, 7); };
+export const eventCount = checks => checks.filter((check, index) => check.status === 'offline' && (index === 0 || checks[index - 1].status !== 'offline')).length;
+export const relativeTime = seconds => seconds < 60 ? `${Math.max(1, Math.round(seconds))}s` : seconds < 3600 ? `${Math.floor(seconds / 60)}m` : seconds < 86400 ? `${Math.floor(seconds / 3600)}h` : `${Math.floor(seconds / 86400)}d`;
+export const metrics = (checks, site) => { const total = checks.length; const online = checks.filter(check => check.status === 'online').length; const times = checks.map(check => check.response_time_ms ?? check.responseTime).filter(Number.isFinite); return { uptime: total ? (online / total) * 100 : 100, incidents: eventCount(checks), average: times.length ? times.reduce((sum, time) => sum + time, 0) / times.length : null, slow: times.length ? times.reduce((sum, time) => sum + time, 0) / times.length > 2000 : false, belowSla: site.group !== 'Private On-Premise' && total > 0 && (online / total) * 100 < (site.slaTarget ?? site.sla_target ?? 99) }; };

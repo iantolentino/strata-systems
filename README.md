@@ -6,10 +6,13 @@ Uptime dashboard for Strata Staff Global. It is a Vite + React app with a Vercel
 
 ```bash
 npm install
-npm run dev
+npm run dev      # http://localhost:5173
+npm run lint     # ESLint
+npm test         # Vitest unit tests
+npm run build    # production build
 ```
 
-The dashboard reads `/api/check-status`. On Vercel Hobby, `vercel.json` runs that endpoint once daily. Status checks and history are stored in Supabase; the endpoint uses a short in-memory response cache so page loads do not re-ping every endpoint.
+The dashboard reads `/api/check-status`. On Vercel Hobby, `vercel.json` runs that endpoint once daily; the **Check All Now** button triggers an on-demand recheck. Status checks and history are stored in Supabase; the endpoint uses a short in-memory response cache so page loads do not re-ping every endpoint.
 
 ## Supabase setup
 
@@ -30,9 +33,13 @@ See the full [Vercel deployment guide](VERCEL_DEPLOYMENT.md). The default Vite b
 
 ## Add or remove a site
 
-Edit the array in [`src/sites.js`](src/sites.js). Each entry is `[id, display name, URL]`; no component changes are needed. The favicon is loaded from Google's favicon service at runtime.
+Use the **Manage Systems** button in the header. It lists every monitored endpoint with edit and delete actions. The favicon is loaded from Google's favicon service at runtime, with a direct `/favicon.ico` fallback.
 
-Maintenance updates and adding sites use the intentionally simple password `123456` as requested. It is not real authentication. Added sites are stored in Supabase when the environment variables are configured.
+Maintenance updates and site management use the intentionally simple password `123456` as requested. It is not real authentication. Added sites are stored in Supabase when the environment variables are configured.
+
+Private on-premise endpoints (e.g. the Grafana server) are listed as **unmonitored** — Vercel cannot reach private IPs, so they are excluded from uptime math and check history instead of being reported as fake-online.
+
+Dark mode defaults to light; the toggle in the header remembers your choice in `localStorage`.
 
 ## Monthly reports
 

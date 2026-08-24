@@ -23,7 +23,11 @@ Status: `FIXED` | `WORKAROUND` (not a real fix, revisit) | `SUPERSEDED` (see lin
 
 | ID | Title | Category | Root Cause (1 line) | Detail File | Date | Status |
 |----|-------|----------|----------------------|-------------|------|--------|
-| | | | | | | |
+| F001 | Dark-mode toggle instantly reverted to dark | WEB | frontend-features.js MutationObserver re-added .dark class on every DOM mutation after React removed it | inline | 2026-08-22 | FIXED |
+| F002 | Page loaded with duplicate /api/report fetches | WEB | Mount effect and [reportMonth] effect both called loadReport on first render | inline | 2026-08-22 | FIXED |
+| F003 | Stored XSS via managed-site list and activity feed | WEB | innerHTML templates interpolated unsanitized API strings (site names, event names) | inline | 2026-08-22 | FIXED |
+| F004 | Private Grafana site always showed online though unreachable from Vercel | BACKEND | check() hardcoded status online for group Private On-Premise instead of checking | inline | 2026-08-22 | FIXED |
+| F005 | /api/badge returned 500 locally but worked on Vercel | BUILD | Vite dev mock response lacked setHeader() that badge.js calls for Content-Type | inline | 2026-08-22 | FIXED |
 
 ---
 
